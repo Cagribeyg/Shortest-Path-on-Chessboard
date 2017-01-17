@@ -4,14 +4,11 @@ import sys
 from random import randint
 import math
 
-
 def matrix(x, y, initial):
     return [[initial for i in range(x)] for j in range(y)]
 
-
 def calculateObstaclePlace(limit):
     return [randint(0, limit), randint(0, limit)]
-
 
 def checkMatrix(adj_matrix, place):
     matrix_value = adj_matrix[place[0]][place[1]]
@@ -43,12 +40,8 @@ for j in range(obstacle_count):
         placeInMatrix(adj_matrix, obstacle_place)
 
 print(adj_matrix)
-
-
 #Now place the robot in random place
-
 #keeper for the robot places
-
 i=1
 while(i>0 ):
     rnd1 = randint(0, matrix_size - 1)
