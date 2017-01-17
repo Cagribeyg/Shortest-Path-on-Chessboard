@@ -4,16 +4,17 @@ import sys
 from random import randint
 import math
 
+#Function for creating 2D array
 def matrix(x, y, initial):
     return [[initial for i in range(x)] for j in range(y)]
-
+#Calculating the obstacles
 def calculateObstaclePlace(limit):
     return [randint(0, limit), randint(0, limit)]
 
 def checkMatrix(adj_matrix, place):
     matrix_value = adj_matrix[place[0]][place[1]]
     return matrix_value == 1
-
+#Put obstacles into a adjaceny matrix
 def placeInMatrix(adj_matrix, place):
     adj_matrix[place[0]][place[1]] = 0
     print("obstacle placed in :", place)
