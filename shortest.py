@@ -96,4 +96,5 @@ while(i>0 ):
         break
     else:
         i=i+1
+#Exit point
 print("Exit placed in: \n",exit_place1,exit_place2)
