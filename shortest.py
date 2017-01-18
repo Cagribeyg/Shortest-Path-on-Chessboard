@@ -4,17 +4,19 @@ import sys
 from random import randint
 import math
 
-#Function for creating 2D array
 def matrix(x, y, initial):
     return [[initial for i in range(x)] for j in range(y)]
-#Calculating the obstacles
+
+def colorr(x, y, initial):
+    return [[initial for i in range(x)] for j in range(y)]
+
 def calculateObstaclePlace(limit):
     return [randint(0, limit), randint(0, limit)]
 
 def checkMatrix(adj_matrix, place):
     matrix_value = adj_matrix[place[0]][place[1]]
     return matrix_value == 1
-#Put obstacles into a adjaceny matrix
+
 def placeInMatrix(adj_matrix, place):
     adj_matrix[place[0]][place[1]] = 0
     print("obstacle placed in :", place)
@@ -41,8 +43,8 @@ for j in range(obstacle_count):
         placeInMatrix(adj_matrix, obstacle_place)
 
 print(adj_matrix)
+
 #Now place the robot in random place
-#keeper for the robot places
 i=1
 while(i>0 ):
     rnd1 = randint(0, matrix_size - 1)
@@ -55,8 +57,8 @@ while(i>0 ):
         break
     else:
         i=i+1
-print("Robot placed in: \n",rbt_place1,rbt_place2)
-
+print("Robot placed in: \n",rbt_place1,rbt_place2,"\n\n")
+print("The status of Board :\n")
 # Now printing the area
 count=0
 for k in range(0,matrix_size):
@@ -96,5 +98,78 @@ while(i>0 ):
         break
     else:
         i=i+1
-#Exit point
-print("Exit placed in: \n",exit_place1,exit_place2)
+print("Exit placed in: \n",exit_place1,exit_place2,"\n\n")
+
+#Implementing tree and nodes
+class Node(object):
+    def __init__(self, data1,data2):
+        self.data1 = data1
+        self.data2=data2
+        self.children = []
+
+    def add_child(self, obj):
+        self.children.append(obj)
+
+
+root_robot = Node(rbt_place1,rbt_place2)
+
+
+
+
+#Finding robot neirbrough
+countOfneirbough = 0
+
+#For up
+if(adj_matrix[rbt_place1-1][rbt_place2]==1 and rbt_place1-1 >=0 ):
+    countOfneirbough= countOfneirbough+1
+    p = Node(rbt_place1-1,rbt_place2)
+    root_robot.add_child(p)
+    print("Up founded")
+
+#For down
+if(rbt_place1+1 ==matrix_size):
+    print("Fault for down")
+else:
+    if(adj_matrix[rbt_place1+1][rbt_place2]==1   ):
+        if(rbt_place1+1 ==matrix_size):
+            print("Fault for down")
+        else:
+            countOfneirbough = countOfneirbough + 1
+            q = Node(rbt_place1 + 1, rbt_place2)
+            root_robot.add_child(q)
+            print("Down founded")
+
+#For right
+if(adj_matrix[rbt_place1][rbt_place2+1]==1  ):
+    if(rbt_place2+1 == matrix_size):
+        print("fault for right")
+    else:
+        countOfneirbough = countOfneirbough+1
+        r = Node(rbt_place1 , rbt_place2+1)
+        root_robot.add_child(r)
+        print("Right founded")
+
+#For left
+if(adj_matrix[rbt_place1][rbt_place2-1]==1 ):
+    if( rbt_place2-1 < 0):
+        print("fault for left")
+    else:
+        countOfneirbough = countOfneirbough + 1
+        s = Node(rbt_place1 , rbt_place2- 1)
+        root_robot.add_child(s)
+        print("Left founded")
+
+print("Count of adjacency",countOfneirbough)
+
+#Initial neigbour of the robot, they were be added as children
+for c in root_robot.children:
+    print("Neighbour :",c.data1, c.data2)
+
+
+
+
+
+
+
+
+
