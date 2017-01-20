@@ -22,16 +22,16 @@ def astar(array, start, goal):
     #Came from seti de bir önceki gittiğimiz kareyi tutuyor. Diğer bir deyişle parent ini tutuyor
     came_from = {}
     #Gerçek Maliyet
-    gscore = {start: 0}
-    fscore = {start: heuristic(start, goal)}
-    #Heap structure nin define edilmesi
-    oheap = []
+    g_puan = {start: 0}
+    f_puan = {start: heuristic(start, goal)}
+    #Heap structure nin define edilmesi. Heapler
+    h_heap = []
     #İlk olarak başlangıç noktamızı heap e pushluyoruz
-    heappush(oheap, (fscore[start], start))
+    heappush(h_heap, (f_puan[start], start))
 
-    while oheap:
+    while h_heap:
         #Heapden popla
-        current = heappop(oheap)[1]
+        current = heappop(h_heap)[1]
 
         if current == goal:
             data = []
@@ -45,7 +45,7 @@ def astar(array, start, goal):
         #Komşularını kontrol et
         for i, j in neighbors:
             neighbor = current[0] + i, current[1] + j
-            tentative_g_score = gscore[current] + heuristic(current, neighbor)
+            tec_g_score = g_puan[current] + heuristic(current, neighbor)
             if 0 <= neighbor[0] < array.shape[0]:
                 if 0 <= neighbor[1] < array.shape[1]:
                     if array[neighbor[0]][neighbor[1]] == 1:
@@ -57,15 +57,15 @@ def astar(array, start, goal):
                 # Arrayin [i][j] i kısmını boundlar. Yani satır kısmını
                 continue
             #Eğer bulduğumuz komşu close sette ise ve tentative g komşu g scoredan büyükse aramaya devam etsin
-            if neighbor in close_set and tentative_g_score >= gscore.get(neighbor, 0):
+            if neighbor in close_set and tec_g_score >= g_puan.get(neighbor, 0):
                 continue
             #Eğer deneme uzaklığımız asıl uzaklıktan küçük ise ve komşu eklediğimiz küme de değil ise
-            if tentative_g_score < gscore.get(neighbor, 0) or neighbor not in [i[1] for i in oheap]:
+            if tec_g_score < g_puan.get(neighbor, 0) or neighbor not in [i[1] for i in h_heap]:
                 came_from[neighbor] = current
-                gscore[neighbor] = tentative_g_score
-                fscore[neighbor] = tentative_g_score + heuristic(neighbor, goal)
+                g_puan[neighbor] = tec_g_score
+                f_puan[neighbor] = tec_g_score + heuristic(neighbor, goal)
                 #Bulduğumuz ve koşullara uyan komşuyu heap e ekle
-                heappush(oheap, (fscore[neighbor], neighbor))
+                heappush(h_heap, (f_puan[neighbor], neighbor))
 
     return False
 
