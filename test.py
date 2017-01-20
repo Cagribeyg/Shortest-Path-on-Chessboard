@@ -58,8 +58,7 @@ while(i>0 ):
     else:
         i=i+1
 print("Robot placed in: \n",rbt_place1,rbt_place2,"\n\n")
-rbttemp1=rbt_place1
-rbttemp2=rbt_place2
+
 print("The status of Board :\n")
 # Now printing the area
 count=0
@@ -114,16 +113,6 @@ class Node(object):
     def add_child(self, obj):
         self.children.append(obj)
 
-class Node2:
-    def __init__(self,data1,data2,parent):
-        self.firstchild=None
-        self.secondchild = None
-        self.thirdchild = None
-        self.fourthchild = None
-        self.data1=data1
-        self.data2=data2
-
-
 
 
 root_robot = Node(rbt_place1,rbt_place2,0,0)
@@ -133,26 +122,39 @@ root_robot = Node(rbt_place1,rbt_place2,0,0)
 clr = matrix(matrix_size, matrix_size, "NOT ADDED")
 clr[rbt_place1][rbt_place2]="ADDED"
 
+
+
 def final_traverse(position1,position2):
+    #Check conditions
+    up = 0
+    down = 0
+    right = 0
+    left = 0
+
+
+
     #First mark robot place as Added
     clr[position1][position2] = "ADDED"
     #For up neighbour
     if(adj_matrix[position1-1][position2]==1 and position1-1>=0 and clr[position1-1][position2]!="ADDED"):
-        p = Node(position1-1,position2,position1,position2)
-        root_robot.add_child(p)
+
         clr[position1-1][position2] = "ADDED"
+        p= Node(position1-1,position2,position1,position2)
+
         print("Up neighbour is added:",position1-1,position2)
-        final_traverse(position1-1,position2)
+        up=1
+
     #For down neighbour
     if(position1+1==matrix_size):
         print("")
     else:
         if(adj_matrix[position1+1][position2]==1 and position1+1!=matrix_size and clr[position1+1][position2]!="ADDED"):
-            q = Node(position1+1,position2,position1,position2)
-            root_robot.add_child(q)
+
             clr[position1+1][position2 ] = "ADDED"
+            q = Node(position1 + 1, position2, position1, position2)
             print("Down neighbour is added:", position1 + 1, position2)
-            final_traverse(position1 + 1, position2)
+            down=1
+
     #For right neighbour
     if(position2+1==matrix_size):
         print()
@@ -161,31 +163,31 @@ def final_traverse(position1,position2):
             print()
         else:
             if(adj_matrix[position1][position2+1]==1 and position2+1 !=matrix_size and clr[position1][position2+1 != "ADDED"]):
-                r = Node(position1,position2+1,position1,position2)
-                root_robot.add_child(r)
+                r = Node(position1 , position2+1, position1, position2)
                 clr[position1][position2+1]="ADDED"
                 print("Right neighbour is added:", position1 , position2+1)
-                final_traverse(position1 , position2+ 1)
+                right=1
+
     #For left neighbour
     if(position2-1<0):
         print()
     else:
         if(adj_matrix[position1][position2-1]==1 and position2-1>=0 and clr[position1][position2-1] != "ADDED"):
-            left_position1 = position1
-            left_position2 = position2 - 1
-            s = Node(position1,position2-1,position1,position2)
-            root_robot.add_child(s)
+
             clr[position1][position2 -1] = "ADDED"
+            s = Node(position1, position2 - 1, position1, position2)
             print("Left neighbour is added:", position1 , position2- 1)
-            final_traverse(position1,position2-1)
+            left=1
+
+
+
+
+
 
 
 
 final_traverse(rbt_place1,rbt_place2)
-count =0
-for i in root_robot.children:
-    count = count +1
-print(count)
+
 shortest_count=0
 for i in root_robot.children:
     print("Values are: ",i.data1, i.data2, "Parent is",i.parent1,i.parent2)
@@ -210,24 +212,24 @@ current_position2=exit_place2
 
 p=1
 
-while(p>0):
-    #Finding parent of current
-    temp_parent1 = findingParent1(current_position1, current_position2)
-    temp_parent2 = findingParent2(current_position1, current_position2)
-    #Creating a node
-    t1 = Node(current_position1,current_position2,temp_parent1,temp_parent2)
-    print("T1 are",t1.data1,t1.data2,"\t",t1.parent1,t1.parent2)
-    current_position1 = temp_parent1
-    current_position2 = temp_parent2
-    newprt1 = findingParent1(current_position1,current_position2)
-    newprt2 = findingParent2(current_position1, current_position2)
-
-    newNode = Node(temp_parent1,temp_parent2,newprt1,newprt2)
-    print("New node are", newNode.data1,newNode.data2,"\t",newNode.parent1,newNode.parent2)
-
-    if(newNode.data1==rbt_place1 and newNode.data2==rbt_place2):
-        break
-    else:
-        shortest_count=shortest_count+1
-
-print("Shortest",shortest_count)
+# while(p>0):
+#     #Finding parent of current
+#     temp_parent1 = findingParent1(current_position1, current_position2)
+#     temp_parent2 = findingParent2(current_position1, current_position2)
+#     #Creating a node
+#     t1 = Node(current_position1,current_position2,temp_parent1,temp_parent2)
+#     print("T1 are",t1.data1,t1.data2,"\t",t1.parent1,t1.parent2)
+#     current_position1 = temp_parent1
+#     current_position2 = temp_parent2
+#     newprt1 = findingParent1(current_position1,current_position2)
+#     newprt2 = findingParent2(current_position1, current_position2)
+#
+#     newNode = Node(temp_parent1,temp_parent2,newprt1,newprt2)
+#     print("New node are", newNode.data1,newNode.data2,"\t",newNode.parent1,newNode.parent2)
+#
+#     if(newNode.data1==rbt_place1 and newNode.data2==rbt_place2):
+#         break
+#     else:
+#         shortest_count=shortest_count+1
+#
+# print("Shortest",shortest_count+1)
