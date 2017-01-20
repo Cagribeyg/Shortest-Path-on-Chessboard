@@ -32,7 +32,7 @@ def astar(array, start, goal):
     while h_heap:
         #Heapden popla
         current = heappop(h_heap)[1]
-
+        #Eğer ulaşmamız gereken koordinata ulaştık ise
         if current == goal:
             data = []
             #Bulduğumuz data bi öncekinden gelmeyse
