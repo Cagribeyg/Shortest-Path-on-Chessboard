@@ -58,6 +58,8 @@ while(i>0 ):
     else:
         i=i+1
 print("Robot placed in: \n",rbt_place1,rbt_place2,"\n\n")
+rbttemp1=rbt_place1
+rbttemp2=rbt_place2
 print("The status of Board :\n")
 # Now printing the area
 count=0
@@ -120,44 +122,48 @@ root_robot = Node(rbt_place1,rbt_place2)
 countOfneirbough = 0
 
 #For up
-if(adj_matrix[rbt_place1-1][rbt_place2]==1 and rbt_place1-1 >=0 ):
-    countOfneirbough= countOfneirbough+1
-    p = Node(rbt_place1-1,rbt_place2)
-    root_robot.add_child(p)
-    print("Up founded")
+# if(adj_matrix[rbt_place1-1][rbt_place2]==1 and rbt_place1-1 >=0 ):
+#     countOfneirbough= countOfneirbough+1
+#     p = Node(rbt_place1-1,rbt_place2)
+#     root_robot.add_child(p)
+#     print("Up founded")
+#
+# #For down
+# if(rbt_place1+1 ==matrix_size):
+#     print("Fault for down")
+# else:
+#     if(adj_matrix[rbt_place1+1][rbt_place2]==1   ):
+#         if(rbt_place1+1 ==matrix_size):
+#             print("Fault for down")
+#         else:
+#             countOfneirbough = countOfneirbough + 1
+#             q = Node(rbt_place1 + 1, rbt_place2)
+#             root_robot.add_child(q)
+#             print("Down founded")
+#
+# #For right
+# if(rbt_place2+1 == matrix_size):
+#     print("fault for right")
+# else:
+#     if(adj_matrix[rbt_place1][rbt_place2+1]==1  ):
+#         if(rbt_place2+1 == matrix_size):
+#             print("fault for right")
+#         else:
+#             countOfneirbough = countOfneirbough+1
+#             r = Node(rbt_place1 , rbt_place2+1)
+#             root_robot.add_child(r)
+#             print("Right founded")
+#
+# #For left
+# if(adj_matrix[rbt_place1][rbt_place2-1]==1 ):
+#     if( rbt_place2-1 < 0):
+#         print("fault for left")
+#     else:
+#         countOfneirbough = countOfneirbough + 1
+#         print("Left founded")
+#         s = Node(rbt_place1 , rbt_place2- 1)
+#         root_robot.add_child(s)
 
-#For down
-if(rbt_place1+1 ==matrix_size):
-    print("Fault for down")
-else:
-    if(adj_matrix[rbt_place1+1][rbt_place2]==1   ):
-        if(rbt_place1+1 ==matrix_size):
-            print("Fault for down")
-        else:
-            countOfneirbough = countOfneirbough + 1
-            q = Node(rbt_place1 + 1, rbt_place2)
-            root_robot.add_child(q)
-            print("Down founded")
-
-#For right
-if(adj_matrix[rbt_place1][rbt_place2+1]==1  ):
-    if(rbt_place2+1 == matrix_size):
-        print("fault for right")
-    else:
-        countOfneirbough = countOfneirbough+1
-        r = Node(rbt_place1 , rbt_place2+1)
-        root_robot.add_child(r)
-        print("Right founded")
-
-#For left
-if(adj_matrix[rbt_place1][rbt_place2-1]==1 ):
-    if( rbt_place2-1 < 0):
-        print("fault for left")
-    else:
-        countOfneirbough = countOfneirbough + 1
-        s = Node(rbt_place1 , rbt_place2- 1)
-        root_robot.add_child(s)
-        print("Left founded")
 
 print("Count of adjacency",countOfneirbough)
 
@@ -165,11 +171,65 @@ print("Count of adjacency",countOfneirbough)
 for c in root_robot.children:
     print("Neighbour :",c.data1, c.data2)
 
+clr = matrix(matrix_size, matrix_size, "WHITE")
 
 
+def traverse(seekpoint1,seekpoint2):
+    if(seekpoint1==exit_place1 and seekpoint2==exit_place2):
+        return "seek point 1, seek point 2", seekpoint1,seekpoint2
+    else:
+        # For up
+        if (adj_matrix[seekpoint1 - 1][seekpoint2] == 1 and clr[seekpoint1 - 1][
+            seekpoint2] == "WHITE" and seekpoint1 - 1 >= 0):
+            print("Up recursion found,", seekpoint1 - 1, seekpoint2)
+            clr[seekpoint1 - 1][seekpoint2] = "BLACK"
+            seekpoint1 = seekpoint1 - 1
+            seekpoint2 = rbt_place2
+            p = Node(seekpoint1, seekpoint2)
+            root_robot.add_child(p)
+            traverse(seekpoint1, seekpoint2)
+        #For Down
+        if(rbt_place1+1==matrix_size):
+            print("fault in recursion down")
+        else:
+            if (adj_matrix[rbttemp1 + 1][rbttemp2] == 1 and clr[rbttemp1+1][rbttemp2]=="WHITE" and rbttemp1+1 !=matrix_size ):
+                clr[rbttemp1+1][rbttemp2]="BLACK"
+                print("Down recursion found,",rbttemp1+1,rbttemp2)
+                seekpoint1=rbttemp1+1
+                seekpoint2=rbttemp2
+                q = Node(seekpoint1,seekpoint2)
+                root_robot.add_child(q)
+                traverse(seekpoint1,seekpoint2)
+        #For right
+        if(rbttemp2==matrix_size):
+            print("Fault for right recursion")
+        else:
+            if (adj_matrix[rbttemp1][rbttemp2 + 1] == 1 and clr[rbttemp1][rbttemp2+1]=="WHITE" and rbttemp2+1 != matrix_size):
+                clr[rbttemp1 ][rbttemp2+ 1] = "BLACK"
+                print("Right recursion found,", rbttemp1 , rbttemp2+ 1)
+                seekpoint1 = rbttemp1
+                seekpoint2 = rbttemp2 + 1
+                r = Node(seekpoint1, seekpoint2)
+                root_robot.add_child(r)
+                traverse(seekpoint1, seekpoint2)
+        #For left
+        if (adj_matrix[rbttemp1][rbttemp2 - 1] == 1):
+            if (rbttemp2 - 1 < 0):
+                print("Fault for left recursion")
+            elif(rbttemp2 - 1 > 0 and clr[rbttemp1][rbttemp2-1]=="WHITE"):
+                print("Left recursion found,", rbttemp1, rbttemp2 - 1)
+                clr[rbttemp1 ][rbttemp2-1] = "BLACK"
+                seekpoint1 = rbttemp1 -1
+                seekpoint2 = rbttemp2
+                s = Node(seekpoint1, seekpoint2)
+                root_robot.add_child(s)
+                traverse(seekpoint1, seekpoint2)
 
 
-
+traverse(rbt_place1,rbt_place2)
+print("Traversedan çıktı")
+for i in root_robot.children:
+    print("asd")
 
 
 
